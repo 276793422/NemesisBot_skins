@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <!-- 自带 base：相对资产按文档目录解析（服务在 /skins/<id>/app/ 子路径下）。
+         同时占位 <base> 标签防服务端 BridgeSubpathService 注入 <base href="/">——
+         那会把 ./assets 解析回根路径 404（skins.rs handle_app_index 同款注释）。 -->
+    <base href="./" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NemesisBot Buddy</title>
+    <script>
+      // 主题防闪烁：优先本地偏好，缺省跟随系统
+      (function () {
+        var t = localStorage.getItem('nemesisbot_buddy_theme')
+        if (t !== 'light' && t !== 'dark') {
+          t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light'
+        }
+        document.documentElement.setAttribute('data-nb-theme', t)
+      })()
+    </script>
+    <script type="module" crossorigin src="./assets/index-DJQOVoB8.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-2YYG51aG.css">
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
+</html>

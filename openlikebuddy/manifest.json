@@ -1,0 +1,17 @@
+{
+  "format": "nbskin",
+  "format_version": 1,
+  "id": "openlikebuddy",
+  "name": "OpenLikeBuddy",
+  "description": "Buddy 设计语言桌面观感皮肤：自带独立应用（app/，服务于 /skins/openlikebuddy/app/）——主窗全骨架（38px 标题栏 / 220px 侧栏[新建任务+助理/项目/专家/自动化/更多+任务/空间分组] / 22px 状态栏 / 居中聊天列 / 浮动输入盒）、主页品牌区+场景标签、设置独立窗（外观[明暗+主题商店接口预留]/账号 stub/管理后台/关于）、全局搜索窗（800×640）、Office 文档窗壳（接口预留）、账号菜单（签到/个人账号 stub）；助理=persona.*、项目=projects.*、专家=skills.*、自动化=cron+workflow、空间=cluster 节点，全部直连后台 WSAPI，bot 零改动；账号/Office/商店类无后端能力一律 UI 接口预留。theme 载荷（skin/openlikebuddy.css）可为原版 Dashboard 提供同款观感。品牌青 #00C29A、亮暗双变体。",
+  "version": "0.4.0",
+  "type": "theme",
+  "entry": "skin/openlikebuddy.css",
+  "app": "app/",
+  "variants": ["light", "dark"],
+  "compat": {
+    "dashboard": ">=0.1"
+  },
+  "author": "NemesisBot",
+  "license": "MIT"
+}

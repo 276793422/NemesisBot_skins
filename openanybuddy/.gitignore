@@ -1,0 +1,10 @@
+# Node / build
+node_modules/
+*.vsix
+out/
+
+# Local dev runtime (gateway instances, logs, extracted bases)
+dev/
+
+# 供应商架构调研材料（内部参考，不进仓库）
+docs/vendor-*.md

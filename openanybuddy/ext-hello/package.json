@@ -1,0 +1,44 @@
+{
+  "name": "oa-hello",
+  "displayName": "OpenAnyBuddy Hello (S0)",
+  "description": "S0 validation pillar: webview extension bridging the NemesisBot gateway WSAPI. Throwaway dev scaffold for the OpenAnyBuddy skin.",
+  "version": "0.0.1",
+  "publisher": "openanybuddy",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.109.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "oaHello.open",
+        "title": "OpenAnyBuddy: Open Hello Panel"
+      }
+    ],
+    "configuration": {
+      "title": "OpenAnyBuddy",
+      "properties": {
+        "openanybuddy.gatewayUrl": {
+          "type": "string",
+          "default": "",
+          "description": "NemesisBot gateway WS base, e.g. ws://172.23.112.1:49080 (env NEMESISBOT_IDE_GATEWAY_URL overrides)"
+        },
+        "openanybuddy.gatewayToken": {
+          "type": "string",
+          "default": "",
+          "description": "NemesisBot gateway auth token (env NEMESISBOT_IDE_GATEWAY_TOKEN overrides)"
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}

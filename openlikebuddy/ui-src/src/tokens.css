@@ -1,0 +1,171 @@
+/**
+ * openlikebuddy — Buddy foundation tokens（亮/暗全套）。
+ *
+ * 数值为本皮肤设计规格定稿（亮/暗两套完整取值）。
+ * 组织为本皮肤自己的命名，默认亮色，`data-nb-theme="dark"` 覆盖暗色。
+ */
+
+:root {
+  /* ── 中性 palette ── */
+  --nb-black-90: rgba(0, 0, 0, 0.9);
+  --nb-black-75: rgba(0, 0, 0, 0.75);
+  --nb-black-70: rgba(0, 0, 0, 0.7);
+  --nb-black-60: rgba(0, 0, 0, 0.6);
+  --nb-black-50: rgba(0, 0, 0, 0.5);
+  --nb-black-45: rgba(0, 0, 0, 0.45);
+  --nb-black-40: rgba(0, 0, 0, 0.4);
+  --nb-black-30: rgba(0, 0, 0, 0.3);
+  --nb-black-20: rgba(0, 0, 0, 0.2);
+  --nb-black-10: rgba(0, 0, 0, 0.1);
+  --nb-black-08: rgba(0, 0, 0, 0.08);
+  --nb-black-06: rgba(0, 0, 0, 0.06);
+  --nb-black-04: rgba(0, 0, 0, 0.04);
+  --nb-white-100: #ffffff;
+  --nb-white-90: rgba(255, 255, 255, 0.9);
+  --nb-white-80: rgba(255, 255, 255, 0.8);
+  --nb-white-75: rgba(255, 255, 255, 0.75);
+  --nb-white-70: rgba(255, 255, 255, 0.7);
+  --nb-white-65: rgba(255, 255, 255, 0.65);
+  --nb-white-50: rgba(255, 255, 255, 0.5);
+  --nb-white-45: rgba(255, 255, 255, 0.45);
+  --nb-white-40: rgba(255, 255, 255, 0.4);
+  --nb-white-35: rgba(255, 255, 255, 0.35);
+  --nb-white-20: rgba(255, 255, 255, 0.2);
+  --nb-white-14: rgba(255, 255, 255, 0.14);
+  --nb-white-10: rgba(255, 255, 255, 0.1);
+  --nb-white-08: rgba(255, 255, 255, 0.08);
+  --nb-white-06: rgba(255, 255, 255, 0.06);
+
+  /* ── 品牌 teal ── */
+  --nb-brand-1: #dff7f2;
+  --nb-brand-5: #60d9c0;
+  --nb-brand-7: #40d1b3;
+  --nb-brand-8: #00c29a;
+  --nb-brand-9: #009273;
+  --nb-brand-soft: rgba(0, 194, 154, 0.12);
+
+  /* ── 状态色 ── */
+  --nb-green: #0cbf5b;
+  --nb-orange: #ff7800;
+  --nb-red: #f64041;
+  --nb-blue: #3370ff;
+  --nb-blue-soft: #eaf2ff;
+
+  /* ── 表面/文字/边框（亮色） ── */
+  --nb-titlebar-bg: #f5f5f5;
+  --nb-statusbar-bg: #f8f8f8;
+  --nb-chrome-bg: #f2f2f2;
+  --nb-sidebar-bg: #f7f7f8;
+  --nb-content-bg: #ffffff;
+  --nb-surface: #ffffff;
+  --nb-elevated: #ffffff;
+  --nb-inset: #f2f2f2;
+  --nb-inset-strong: #ebebeb;
+  --nb-input-inset: linear-gradient(180deg, #f0f0f0 0%, #f5f5f5 100%);
+  --nb-hover: rgba(0, 0, 0, 0.05);
+  --nb-active: rgba(0, 0, 0, 0.08);
+  --nb-text-1: rgba(0, 0, 0, 0.9);
+  --nb-text-2: rgba(0, 0, 0, 0.65);
+  --nb-text-3: rgba(0, 0, 0, 0.45);
+  --nb-text-4: rgba(0, 0, 0, 0.3);
+  --nb-text-solid: #000000;
+  --nb-text-secondary-solid: #5d5d5d;
+  --nb-border-1: #dedede;
+  --nb-border-2: #ebebeb;
+  --nb-border-3: rgba(0, 0, 0, 0.08);
+  --nb-border-4: rgba(0, 0, 0, 0.06);
+  --nb-mask: rgba(0, 0, 0, 0.3);
+  --nb-control-selected-bg: rgba(0, 0, 0, 0.9);
+  --nb-control-selected-bg-hover: rgba(0, 0, 0, 0.96);
+  --nb-control-selected-fg: #ffffff;
+  --nb-shadow-card: 0 16px 32px -8px rgba(0, 0, 0, 0.03);
+  --nb-shadow-pop: 0 4px 24px rgba(0, 0, 0, 0.12), 0 0 1px rgba(0, 0, 0, 0.2);
+  --nb-shadow-win: 0 12px 48px rgba(0, 0, 0, 0.22), 0 0 1px rgba(0, 0, 0, 0.3);
+  --nb-shadow-thumb: 0 1px 2px rgba(0, 0, 0, 0.18);
+  --nb-scrollbar: rgba(0, 0, 0, 0.2);
+  --nb-scrollbar-hover: rgba(0, 0, 0, 0.3);
+  --nb-skeleton: rgba(0, 0, 0, 0.06);
+
+  /* ── 主页 ── */
+  --nb-home-bg: #f2f2f2;
+  --nb-home-card: #ffffff;
+  --nb-home-input-slot: linear-gradient(180deg, #f0f0f0 0%, #f5f5f5 100%);
+
+  /* 外观预览窗微缩画（设置-外观的主题卡可覆写这三轴） */
+  --nb-preview-content: #ffffff;
+  --nb-preview-side: #f7f7f8;
+  --nb-preview-accent: #00c29a;
+
+  /* ── 尺寸/圆角/字体 ── */
+  --nb-radius-sm: 4px;
+  --nb-radius-md: 6px;
+  --nb-radius-lg: 8px;
+  --nb-radius-xl: 12px;
+  --nb-radius-pop: 16px;
+  --nb-control-sm: 24px;
+  --nb-control-md: 28px;
+  --nb-control-lg: 32px;
+  --nb-control-xl: 36px;
+  --nb-icon: 16px;
+  --nb-font: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei',
+    'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --nb-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+html[data-nb-theme='dark'] {
+  --nb-brand-1: #0e2520;
+  --nb-brand-5: #1ca98c;
+  --nb-brand-7: #22cba8;
+  --nb-brand-8: #4cf0ce;
+  --nb-brand-9: #7cf0d8;
+  --nb-brand-soft: rgba(34, 203, 168, 0.16);
+
+  --nb-green: #43f08f;
+  --nb-orange: #ec7913;
+  --nb-red: #af191a;
+  --nb-blue: #6b9cff;
+  --nb-blue-soft: #1b2737;
+
+  /* 表面映射遵循 office-shell 暗色规则：chrome #1f1f1f、表面 #292929、内容 #1f1f1f、侧栏 #141414 */
+  --nb-titlebar-bg: #1a1a1a;
+  --nb-statusbar-bg: #1a1a1a;
+  --nb-chrome-bg: #1f1f1f;
+  --nb-sidebar-bg: #141414;
+  --nb-content-bg: #1f1f1f;
+  --nb-surface: #292929;
+  --nb-elevated: #292929;
+  --nb-inset: #242424;
+  --nb-inset-strong: #262626;
+  --nb-input-inset: #292929;
+  --nb-hover: rgba(255, 255, 255, 0.06);
+  --nb-active: rgba(255, 255, 255, 0.1);
+  --nb-text-1: rgba(255, 255, 255, 0.92);
+  --nb-text-2: rgba(255, 255, 255, 0.65);
+  --nb-text-3: rgba(255, 255, 255, 0.5);
+  --nb-text-4: rgba(255, 255, 255, 0.35);
+  --nb-text-solid: #ffffff;
+  --nb-text-secondary-solid: #a6a6a6;
+  --nb-border-1: #3d3d3d;
+  --nb-border-2: #2e2e2e;
+  --nb-border-3: rgba(255, 255, 255, 0.1);
+  --nb-border-4: rgba(255, 255, 255, 0.08);
+  --nb-mask: rgba(0, 0, 0, 0.55);
+  --nb-control-selected-bg: rgba(255, 255, 255, 0.9);
+  --nb-control-selected-bg-hover: rgba(255, 255, 255, 0.96);
+  --nb-control-selected-fg: rgba(0, 0, 0, 0.9);
+  --nb-shadow-card: 0 16px 32px -8px rgba(0, 0, 0, 0.3);
+  --nb-shadow-pop: 0 4px 24px rgba(0, 0, 0, 0.5), 0 0 1px rgba(0, 0, 0, 0.6);
+  --nb-shadow-win: 0 12px 48px rgba(0, 0, 0, 0.6), 0 0 1px rgba(0, 0, 0, 0.7);
+  --nb-shadow-thumb: 0 1px 4px rgba(0, 0, 0, 0.6);
+  --nb-scrollbar: rgba(255, 255, 255, 0.2);
+  --nb-scrollbar-hover: rgba(255, 255, 255, 0.3);
+  --nb-skeleton: rgba(255, 255, 255, 0.08);
+
+  --nb-home-bg: #1f1f1f;
+  --nb-home-card: #141414;
+  --nb-home-input-slot: #292929;
+
+  --nb-preview-content: #292929;
+  --nb-preview-side: #141414;
+  --nb-preview-accent: #22cba8;
+}

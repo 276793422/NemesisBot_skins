@@ -1,42 +1,24 @@
 // 打包 openlikebuddy 皮肤 → dist/openlikebuddy.nbskin
 //
 // .nbskin = 单文件 ZIP（nbskin v1）：
-//   manifest.json + skin/openlikebuddy.css（theme 载荷，/skins/active.css）
-//   + app/**（皮肤自带完整应用，/skins/openlikebuddy/app/ 服务）。
+//   manifest.json + skin/openlikebuddy.css（theme 载荷，/skins/active.css
+//   注入当前 Dashboard 原地换装）。皮肤只有这一种语义——不打包 app/（仓库
+//   里的独立应用产物仅作历史参考，不属于皮肤包）。
 // 不用 tar -a：GNU tar 无 zip 写入器、bsdtar 按扩展名选格式（.nbskin 不认识
 // 会静默产出裸 tar）；PowerShell 5.1 Compress-Archive 条目用反斜杠分隔。
 // 三平台唯一确定的公共前提是 Node（web 构建本来就依赖），故零依赖手写
 // ZIP（deflate via node:zlib，条目 / 分隔，无目录占位条目）。
 import { deflateRawSync } from 'node:zlib'
-import { readFileSync, writeFileSync, mkdirSync, readdirSync, statSync, existsSync } from 'node:fs'
-import { dirname, join, relative, sep } from 'node:path'
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
+import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const pkgRoot = join(dirname(fileURLToPath(import.meta.url)), '..')
 const outDir = join(pkgRoot, 'dist')
 const outFile = join(outDir, 'openlikebuddy.nbskin')
 
-// 固定条目 + app/ 目录递归收集
+// 固定条目（theme 载荷 only）
 const ENTRIES = ['manifest.json', 'skin/openlikebuddy.css']
-const appDir = join(pkgRoot, 'app')
-if (existsSync(appDir)) {
-  walk(appDir)
-} else {
-  console.error('FAILED: app/ 不存在——先在 ui-src 里 npm run build（产物输出到皮肤包 app/）')
-  process.exit(1)
-}
-
-function walk(dir) {
-  for (const name of readdirSync(dir).sort()) {
-    const p = join(dir, name)
-    if (statSync(p).isDirectory()) {
-      walk(p)
-    } else {
-      // ZIP 条目一律 / 分隔（Windows sep 反斜杠归一）
-      ENTRIES.push('app/' + relative(appDir, p).split(sep).join('/'))
-    }
-  }
-}
 
 // --- CRC-32（IEEE 802.3，ZIP 规范多项式 0xEDB88320） ---
 const CRC_TABLE = (() => {

@@ -3,8 +3,9 @@
  * ============================================================
  *
  * 设计定稿：布局骨架与控件规格全量落地——
- * 顶栏 38px / 状态栏 22px（伪元素画条，前端源码零改动）、侧栏 220px
- * 行形态、聊天列 832px 居中 + 浮动圆角输入盒、气泡去头像化、
+ * 顶栏 38px / 状态栏 22px（DOM 骨架槽位：前端在皮肤激活时渲染内容条，
+ * 本皮肤做品牌化着色）、侧栏 220px 行形态、聊天列 832px 居中 +
+ * 浮动圆角输入盒、气泡去头像化、主页启动器（品牌 + 场景标签）、
  * 按钮/输入/卡片/表格/弹窗全套规格、组件生态 alias token 收编、
  * 视图裸色值逐点覆盖。原始 bot 皮肤零影响：本文件只在
  * html[data-skin="openlikebuddy"] 前缀下生效。
@@ -97,6 +98,8 @@ html[data-skin="openlikebuddy"] {
   --error-color: #DC4258;
 
   /* ---- Buddy 骨架专用 token（本皮肤自有，不与 theme.css 冲突）---- */
+  /* 侧栏 220px（theme.css 默认 240px——§3 注释声称由 token 承载，此前漏定义） */
+  --sidebar-width: 220px;
   --nb-titlebar-bg: #1A1A1A;
   --nb-statusbar-bg: #1A1A1A;
   --nb-chrome-border: rgba(255, 255, 255, 0.08);
@@ -217,39 +220,21 @@ html[data-skin="openlikebuddy"][data-theme="light"] {
 }
 
 /* ============================================================
- * §2 骨架 — 顶栏 38px + 状态栏 22px（伪元素画条，装饰性、不挡点击）
+ * §2 骨架 — 顶栏 38px + 状态栏 22px（DOM 槽位由前端在皮肤激活时渲染，
+ * components.css 给通用基线；本节做 Buddy 品牌化着色与边界）
  * ============================================================ */
 html[data-skin="openlikebuddy"] .app-layout {
-  position: relative;
-  padding-top: 38px;
-  padding-bottom: 22px;
   background: var(--bg);
 }
 
-html[data-skin="openlikebuddy"] .app-layout::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 38px;
+html[data-skin="openlikebuddy"] .nb-titlebar {
   background: var(--nb-titlebar-bg);
   border-bottom: 1px solid var(--nb-chrome-border);
-  z-index: calc(var(--z-sidebar, 100) + 10);
-  pointer-events: none;
 }
 
-html[data-skin="openlikebuddy"] .app-layout::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 22px;
+html[data-skin="openlikebuddy"] .nb-statusbar {
   background: var(--nb-statusbar-bg);
   border-top: 1px solid var(--nb-chrome-border);
-  z-index: calc(var(--z-sidebar, 100) + 10);
-  pointer-events: none;
 }
 
 /* ============================================================
@@ -1027,17 +1012,12 @@ html[data-skin="openlikebuddy"] .modal-overlay {
 }
 
 /* ============================================================
- * §8 移动端降级 — ≤768px 撤骨架（保持 v1 配色版式），Buddy 骨架是桌面形态
+ * §8 移动端降级 — ≤768px 撤骨架（components.css 通用段已撤 padding 与
+ * 骨架条；这里只做 Buddy 侧栏行距的移动端回退）
  * ============================================================ */
 @media (max-width: 768px) {
-  html[data-skin="openlikebuddy"] .app-layout {
-    padding-top: 0;
-    padding-bottom: 0;
-  }
-
-  html[data-skin="openlikebuddy"] .app-layout::before,
-  html[data-skin="openlikebuddy"] .app-layout::after {
-    display: none;
+  html[data-skin="openlikebuddy"] .sidebar {
+    padding: 8px;
   }
 }
 
@@ -1052,4 +1032,133 @@ html[data-skin="openlikebuddy"] .sidebar.collapsed .nav-item {
 html[data-skin="openlikebuddy"] .sidebar.collapsed .sidebar-status {
   justify-content: center;
   padding: 0;
+}
+
+/* §9 左侧栏骨架槽位（SkinSidebar）品牌化 —— Buddy 形态：
+ * 新建对话 = WB 主按钮（暗白/亮黑底）；行密度/分组头/footer 对齐 WB 侧栏规格。 */
+html[data-skin="openlikebuddy"] .nb-sb {
+  padding: 12px 10px;
+  gap: 4px;
+}
+html[data-skin="openlikebuddy"] .nb-sb-newtask {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-fg);
+  border-radius: 8px;
+  height: 36px;
+  font-weight: 500;
+}
+html[data-skin="openlikebuddy"] .nb-sb-newtask:hover {
+  background: var(--btn-primary-hover);
+}
+html[data-skin="openlikebuddy"] .nb-sb-item {
+  height: 28px;
+  border-radius: 6px;
+  padding: 0 8px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.65);
+}
+html[data-skin="openlikebuddy"] .nb-sb-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.9);
+}
+html[data-skin="openlikebuddy"] .nb-sb-item--active {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+html[data-skin="openlikebuddy"] .nb-sb-flyout {
+  background: #242424;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+html[data-skin="openlikebuddy"] .nb-sb-flyout-item {
+  color: rgba(255, 255, 255, 0.65);
+}
+html[data-skin="openlikebuddy"] .nb-sb-flyout-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.9);
+}
+html[data-skin="openlikebuddy"] .nb-sb-section {
+  color: rgba(255, 255, 255, 0.45);
+}
+html[data-skin="openlikebuddy"] .nb-sb-row {
+  height: 28px;
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.65);
+}
+html[data-skin="openlikebuddy"] .nb-sb-row:hover,
+html[data-skin="openlikebuddy"] .nb-sb-row--active {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.9);
+}
+html[data-skin="openlikebuddy"] .nb-sb-row-time {
+  color: rgba(255, 255, 255, 0.4);
+}
+html[data-skin="openlikebuddy"] .nb-sb-footer {
+  border-top-color: var(--nb-chrome-border, rgba(255, 255, 255, 0.08));
+}
+html[data-skin="openlikebuddy"] .nb-sb-user-name {
+  color: rgba(255, 255, 255, 0.9);
+}
+html[data-skin="openlikebuddy"] .nb-sb-user-sub,
+html[data-skin="openlikebuddy"] .nb-sb-empty {
+  color: rgba(255, 255, 255, 0.45);
+}
+html[data-skin="openlikebuddy"] .nb-sb-gear,
+html[data-skin="openlikebuddy"] .nb-sb-avatar {
+  color: rgba(255, 255, 255, 0.65);
+}
+html[data-skin="openlikebuddy"] .nb-sb-gear:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* 亮色变体 */
+html[data-skin="openlikebuddy"][data-theme="light"] .nb-sb-item {
+  color: rgba(0, 0, 0, 0.6);
+}
+html[data-skin="openlikebuddy"][data-theme="light"] .nb-sb-item:hover,
+html[data-skin="openlikebuddy"][data-theme="light"] .nb-sb-item--active {
+  background: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.9);
+}
+html[data-skin="openlikebuddy"][data-theme="light"] .nb-sb-flyout {
+  background: #FFFFFF;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+html[data-skin="openlikebuddy"][data-theme="light"] .nb-sb-flyout-item {
+  color: rgba(0, 0, 0, 0.6);
+}
+html[data-skin="openlikebuddy"][data-theme="light"] .nb-sb-flyout-item:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.9);
+}
+html[data-skin="openlikebuddy"][data-theme="light"] .nb-sb-section {
+  color: rgba(0, 0, 0, 0.45);
+}
+html[data-skin="openlikebuddy"][data-theme="light"] .nb-sb-row {
+  color: rgba(0, 0, 0, 0.6);
+}
+html[data-skin="openlikebuddy"][data-theme="light"] .nb-sb-row:hover,
+html[data-skin="openlikebuddy"][data-theme="light"] .nb-sb-row--active {
+  background: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.9);
+}
+html[data-skin="openlikebuddy"][data-theme="light"] .nb-sb-row-time {
+  color: rgba(0, 0, 0, 0.4);
+}
+html[data-skin="openlikebuddy"][data-theme="light"] .nb-sb-footer {
+  border-top-color: var(--nb-chrome-border, rgba(0, 0, 0, 0.06));
+}
+html[data-skin="openlikebuddy"][data-theme="light"] .nb-sb-user-name {
+  color: rgba(0, 0, 0, 0.9);
+}
+html[data-skin="openlikebuddy"][data-theme="light"] .nb-sb-user-sub,
+html[data-skin="openlikebuddy"][data-theme="light"] .nb-sb-empty {
+  color: rgba(0, 0, 0, 0.45);
+}
+html[data-skin="openlikebuddy"][data-theme="light"] .nb-sb-gear,
+html[data-skin="openlikebuddy"][data-theme="light"] .nb-sb-avatar {
+  color: rgba(0, 0, 0, 0.6);
+}
+html[data-skin="openlikebuddy"][data-theme="light"] .nb-sb-gear:hover {
+  background: rgba(0, 0, 0, 0.05);
 }

@@ -4,9 +4,13 @@
   "id": "openlikebuddy",
   "name": "OpenLikeBuddy",
   "brand": "Buddy",
-  "scenes": ["日常办公", "代码开发", "设计创意"],
-  "description": "Buddy 设计语言桌面观感皮肤：给当前 Dashboard 原地换装 WorkBuddy 级观感——主窗全骨架（38px 标题栏 / 220px 侧栏 / 22px 状态栏 / 居中聊天列 / 浮动输入盒）、主页品牌启动器+场景标签、全部管理页统一页框、明暗双变体；同一 URL 同一应用，设为默认观感免重启热切。品牌青 #00C29A。",
-  "version": "0.6.0",
+  "scenes": [
+    "日常办公",
+    "代码开发",
+    "设计创意"
+  ],
+  "description": "Buddy 设计语言桌面观感皮肤（v0.7 起自带声明式结构骨架，nb-sb-* 类名与 v0.6 兼容）：给当前 Dashboard 原地换装 WorkBuddy 级观感——主窗全骨架（38px 标题栏 / 220px 侧栏 / 22px 状态栏 / 居中聊天列 / 浮动输入盒）、主页品牌启动器+场景标签、全部管理页统一页框、明暗双变体；同一 URL 同一应用，设为默认观感免重启热切。品牌青 #00C29A。",
+  "version": "0.7.0",
   "type": "theme",
   "entry": "skin/openlikebuddy.css",
   "variants": [
@@ -14,8 +18,10 @@
     "dark"
   ],
   "compat": {
-    "dashboard": ">=0.1"
+    "dashboard": ">=0.1",
+    "structure-engine": 1
   },
   "author": "NemesisBot",
-  "license": "MIT"
+  "license": "MIT",
+  "structure": "skin/structure.html"
 }

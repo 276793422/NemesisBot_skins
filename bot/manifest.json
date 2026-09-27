@@ -1,0 +1,23 @@
+{
+  "format": "nbskin",
+  "format_version": 1,
+  "id": "bot",
+  "name": "NemesisBot Official",
+  "brand": "NemesisBot",
+  "scenes": ["写代码", "查资料", "自动化"],
+  "description": "NemesisBot 官方皮肤：完整骨架结构（顶栏/侧栏/状态栏/主页启动器）+ 品牌基线观感。与全部第三方皮肤走同一声明式结构引擎（data-nb-*），无独立代码路径。激活 = ui.skin 设为 bot；默认出厂观感 = ui.skin 留空。",
+  "version": "1.0.0",
+  "type": "theme",
+  "entry": "skin/bot.css",
+  "structure": "skin/structure.html",
+  "variants": [
+    "light",
+    "dark"
+  ],
+  "compat": {
+    "dashboard": ">=0.1",
+    "structure-engine": 1
+  },
+  "author": "NemesisBot",
+  "license": "MIT"
+}

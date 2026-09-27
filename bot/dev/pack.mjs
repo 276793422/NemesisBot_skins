@@ -1,9 +1,10 @@
-// 打包 openlikebuddy 皮肤 → dist/openlikebuddy.nbskin
+// 打包 bot 皮肤 → dist/bot.nbskin
 //
 // .nbskin = 单文件 ZIP（nbskin v1）：
-//   manifest.json + skin/openlikebuddy.css（theme 载荷，/skins/active.css
-//   注入当前 Dashboard 原地换装）。皮肤只有这一种语义——不打包 app/（仓库
-//   里的独立应用产物仅作历史参考，不属于皮肤包）。
+//   manifest.json + skin/bot.css + skin/structure.html（CSS 载荷经
+//   /skins/active.css 注入换色；结构载荷经 /skins/active/structure 供
+//   声明式结构引擎渲染骨架）。皮肤 = 给当前应用原地换观感，同一 URL，
+//   不打开任何新页面。
 // 不用 tar -a：GNU tar 无 zip 写入器、bsdtar 按扩展名选格式（.nbskin 不认识
 // 会静默产出裸 tar）；PowerShell 5.1 Compress-Archive 条目用反斜杠分隔。
 // 三平台唯一确定的公共前提是 Node（web 构建本来就依赖），故零依赖手写
@@ -15,10 +16,10 @@ import { fileURLToPath } from 'node:url'
 
 const pkgRoot = join(dirname(fileURLToPath(import.meta.url)), '..')
 const outDir = join(pkgRoot, 'dist')
-const outFile = join(outDir, 'openlikebuddy.nbskin')
+const outFile = join(outDir, 'bot.nbskin')
 
 // 固定条目（theme 载荷 only）
-const ENTRIES = ['manifest.json', 'skin/openlikebuddy.css', 'skin/structure.html']
+const ENTRIES = ['manifest.json', 'skin/bot.css', 'skin/structure.html']
 
 // --- CRC-32（IEEE 802.3，ZIP 规范多项式 0xEDB88320） ---
 const CRC_TABLE = (() => {

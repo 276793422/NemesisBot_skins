@@ -1,0 +1,152 @@
+<!--
+  NemesisBot 官方皮肤结构（bot 包）—— 声明式结构引擎消费。
+  原语规范：docs/REPORT/2026-09-27_skin-structure-engine-v2.md（v2 基础）+
+  docs/PLAN/2026-09-27_skin-contract-v3-content-areas.md（v3 内容区原语）。
+  四槽：sidebar / titlebar / statusbar / **chat**（宿主挂载点 = SkinSlot）。
+  chat 为 v3 内容区槽——整区接管聊天体验（消息流 + 空态品牌 + 输入区），
+  原 launcher 语义折叠进 chat 空态；不声明 chat = 内置聊天区原样（launcher
+  槽语义仍可用，如 openlikebuddy 包）。
+  投影字段语义见 web/src/skins/types.ts（statusVersion/model 已含「· 」分隔符，
+  宿主拼好）。类名 nb-sb-*/nb-titlebar-*/nb-launcher-*/nb-chat-* 的基线样式在
+  本包 skin/bot.css（html[data-skin="bot"] 前缀），第三方包 CSS 同名覆盖。
+-->
+<template data-nb-slot="chat" data-nb-engine="1">
+  <div class="nb-chat">
+    <!-- 消息流：autoscroll 贴底；角色差异经宿主算好的 isUser/isError 布尔。
+         空态（原 launcher 语义折叠于此）：品牌 + 场景 chip（fill-input 预填） -->
+    <div class="nb-chat-scroll" data-nb-autoscroll="messages">
+      <div class="nb-chat-home" data-nb-if="!messages.length">
+        <div class="nb-launcher-brand">
+          <i class="nb-brand-mark nb-brand-mark-lg" aria-hidden="true"></i>
+          <span data-nb-bind="brand"></span>
+        </div>
+        <div class="nb-launcher-scenes">
+          <button data-nb-for="s in scenes" class="nb-scene-chip" data-nb-action="fill-input:{s}" data-nb-bind="s"></button>
+        </div>
+        <div class="nb-chat-empty">还没有消息，发一条试试</div>
+      </div>
+      <div data-nb-for="m in messages" class="nb-chat-row" data-nb-class="nb-chat-row--user:m.isUser; nb-chat-row--error:m.isError">
+        <div class="nb-chat-bubble">
+          <div class="nb-chat-meta" data-nb-if="m.model"><span data-nb-bind="m.model"></span></div>
+          <div class="nb-chat-md" data-nb-if="m.contentHtml" data-nb-html="m.contentHtml"></div>
+          <div class="nb-chat-text" data-nb-if="!m.contentHtml" data-nb-bind="m.content"></div>
+          <div class="nb-chat-meta" data-nb-if="m.sourceNode"><span data-nb-bind="m.sourceNode"></span></div>
+        </div>
+      </div>
+    </div>
+    <!-- 输入区：textarea 双向绑定 chat.input sink；发送/停止走白名单动作
+         （真实管线经委托桥在宿主） -->
+    <div class="nb-chat-composer">
+      <textarea
+        class="nb-chat-input"
+        rows="1"
+        placeholder="输入消息... (Ctrl+Enter 发送)"
+        data-nb-field="chat.input"
+        data-nb-value="inputText"
+      ></textarea>
+      <button class="nb-chat-send" data-nb-action="chat-send" data-nb-attr="disabled:chatBusy">发送</button>
+      <button class="nb-chat-stop" data-nb-if="chatBusy" data-nb-action="chat-stop">停止</button>
+    </div>
+  </div>
+</template>
+
+<template data-nb-slot="titlebar" data-nb-engine="1">
+  <header class="nb-titlebar">
+    <span class="nb-titlebar-brand">
+      <i class="nb-brand-mark" aria-hidden="true"></i>
+      <span class="nb-titlebar-name" data-nb-bind="brand"></span>
+    </span>
+    <span class="nb-titlebar-status">
+      <i class="nb-status-dot" data-nb-class="off:!connected" aria-hidden="true"></i>
+      <span data-nb-bind="connectionText"></span>
+    </span>
+  </header>
+</template>
+
+<template data-nb-slot="sidebar">
+  <aside class="sidebar nb-sb" data-nb-class="mobile-open:mobileOpen">
+    <button class="nb-sb-newtask" data-nb-action="new-chat" title="新建对话">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      新建对话
+    </button>
+
+    <nav class="nb-sb-nav">
+      <button data-nb-for="n in navPrimary" class="nb-sb-item" data-nb-class="nb-sb-item--active:n.active" data-nb-action="route:{n.path}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path data-nb-attr="d:n.icon"/></svg>
+        <span data-nb-bind="n.label"></span>
+      </button>
+
+      <div class="nb-sb-more-wrap" data-nb-outside="moreOpen">
+        <button class="nb-sb-item" data-nb-class="nb-sb-item--active:local.moreOpen" data-nb-action="local:toggle:moreOpen">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          更多
+        </button>
+        <div class="nb-sb-flyout" data-nb-if="local.moreOpen">
+          <button data-nb-for="it in navMore" class="nb-sb-flyout-item" data-nb-action="route:{it.path}" data-nb-bind="it.label"></button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="nb-sb-scroll">
+      <div data-nb-for="g in sessionGroups" class="nb-sb-group">
+        <div class="nb-sb-section">
+          <span class="nb-sb-caret"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          <span data-nb-bind="g.label"></span>
+        </div>
+        <div data-nb-for="s in g.sessions" class="nb-sb-row" data-nb-class="nb-sb-row--active:s.active" data-nb-attr="title:s.title" data-nb-action="switch-session:{s.id}">
+          <span class="nb-sb-row-title" data-nb-bind="s.title"></span>
+          <span class="nb-sb-row-time" data-nb-bind="s.relTime"></span>
+          <span class="nb-sb-row-del" title="删除会话" data-nb-action="remove-session:{s.id}">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          </span>
+        </div>
+      </div>
+      <div class="nb-sb-empty" data-nb-if="!hasSessions">暂无会话</div>
+
+      <div class="nb-sb-section nb-sb-section--space">
+        <span class="nb-sb-caret"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+        空间
+      </div>
+      <div class="nb-sb-row" title="本机（单机模式）">
+        <span class="nb-sb-dot"></span>
+        <span class="nb-sb-row-title">本机</span>
+      </div>
+    </div>
+
+    <div class="nb-sb-estop-row">
+      <span class="nb-sb-fa" data-nb-if="fullAccess" title="Full Access 放行中">FA</span>
+      <button class="nb-sb-estop" data-nb-class="engaged:estopEngaged" data-nb-attr="disabled:estopBusy" data-nb-action="estop-toggle" data-nb-bind="estopLabel"></button>
+    </div>
+
+    <div class="nb-sb-footer">
+      <span class="nb-sb-avatar">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </span>
+      <span class="nb-sb-user">
+        <span class="nb-sb-user-name">本机用户</span>
+        <span class="nb-sb-sig" data-nb-if="signature.visible" data-nb-attr="title:signature.title; data-sig:signature.state" data-nb-bind="signature.label"></span>
+      </span>
+      <button class="nb-sb-gear" title="切换主题" data-nb-action="toggle-theme">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button class="nb-sb-gear" title="退出登录" data-nb-action="logout">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+      <button class="nb-sb-gear" title="设置" data-nb-action="route:/settings">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-2.82 1.18V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 1.18-2.82H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 2.82-1.18V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1.08 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-1.18 2.82H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1.08z"/></svg>
+      </button>
+    </div>
+  </aside>
+</template>
+
+<template data-nb-slot="statusbar">
+  <footer class="nb-statusbar">
+    <span class="nb-statusbar-left">
+      <i class="nb-status-dot" data-nb-class="off:!connected" aria-hidden="true"></i>
+      <span data-nb-bind="connectionText"></span>
+      <span data-nb-if="statusVersion" data-nb-bind="statusVersion"></span>
+      <span data-nb-if="model" data-nb-bind="model"></span>
+    </span>
+    <span class="nb-statusbar-right" data-nb-bind="readyText"></span>
+  </footer>
+</template>

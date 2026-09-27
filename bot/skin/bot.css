@@ -1,0 +1,572 @@
+/* NemesisBot 官方皮肤包（bot）—— 结构槽位基线观感。
+ *
+ * 本包与第三方皮肤走同一声明式结构引擎：结构 = skin/structure.html
+ * （data-nb-* 标注），样式 = 本文件（html[data-skin="bot"] 前缀——与
+ * 其他包的 [data-skin="<id>"] 互斥，永不竞争特异性）。
+ *
+ * 内容两部分：
+ * 1. 结构基线（自宿主 components.css 骨架槽位段迁入，前缀改包级）——
+ *    顶栏 38px / 状态栏 22px / 启动器布局 / .nb-sb-* 侧栏全套；
+ * 2. 官方扩展——E-Stop 三态按钮、签名徽标四态、Full Access 徽标。
+ *
+ * 宿主布局钩子（勿删）：.nb-launcher-mode .chat-messages / .chat-input-area
+ * 由 ChatPanel 在启动器形态挂类；.sidebar 定位壳是全局 layout.css（本包只写内部）。
+ * 明暗适配全部走全局 token（--bg-primary 等），本文件不含裸色值（E-Stop/徽标语义色除外）。
+ */
+
+html[data-skin="bot"] .app-layout {
+  position: relative;
+  padding-top: 38px;
+  padding-bottom: 22px;
+}
+
+/* 顶栏 38px：品牌（左）+ 连接状态（右）；纯装饰不挡点击 */
+html[data-skin="bot"] .nb-titlebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 38px;
+  z-index: calc(var(--z-sidebar, 100) + 10);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-light);
+  pointer-events: none;
+  user-select: none;
+}
+html[data-skin="bot"] .nb-titlebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+html[data-skin="bot"] .nb-titlebar-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* 品牌方 mark（accent 着色，跟随明暗） */
+html[data-skin="bot"] .nb-brand-mark {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 4.5px;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+html[data-skin="bot"] .nb-brand-mark-lg {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+}
+
+/* 连接状态圆点 */
+html[data-skin="bot"] .nb-status-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--success);
+  flex-shrink: 0;
+}
+html[data-skin="bot"] .nb-status-dot.off {
+  background: var(--error);
+}
+
+/* 状态栏 22px：连接 + 版本 + 模型（左）+ 就绪态（右） */
+html[data-skin="bot"] .nb-statusbar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 22px;
+  z-index: calc(var(--z-sidebar, 100) + 10);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border-light);
+  pointer-events: none;
+  user-select: none;
+}
+html[data-skin="bot"] .nb-statusbar-left,
+html[data-skin="bot"] .nb-statusbar-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* 主页启动器：空会话时居中品牌 + 场景标签（输入盒由 launcher-mode 聚拢） */
+html[data-skin="bot"] .nb-launcher-mode .chat-messages {
+  justify-content: center;
+}
+html[data-skin="bot"] .nb-launcher {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  margin: auto 0;
+  user-select: none;
+}
+html[data-skin="bot"] .nb-launcher-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text);
+}
+html[data-skin="bot"] .nb-launcher-scenes {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+html[data-skin="bot"] .nb-scene-chip {
+  height: 32px;
+  padding: 0 16px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color var(--duration-fast, 0.15s) var(--ease-out, ease),
+    color var(--duration-fast, 0.15s) var(--ease-out, ease);
+}
+html[data-skin="bot"] .nb-scene-chip:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+/* 启动器模式下输入盒聚拢为居中启动框（WB composer 形态） */
+html[data-skin="bot"] .nb-launcher-mode .chat-input-area {
+  max-width: min(560px, 80%);
+  margin-inline: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+/* 移动端：骨架条撤场（保持原移动布局） */
+@media (max-width: 768px) {
+  html[data-skin="bot"] .app-layout {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  html[data-skin="bot"] .nb-titlebar,
+  html[data-skin="bot"] .nb-statusbar {
+    display: none;
+  }
+}
+
+/* ---- 左侧栏槽位（SkinSidebar，WB 形态）----
+ * 根元素复用全局 .sidebar 定位壳（flex 布局 + --sidebar-width + 主题
+ * token）；内部结构用 .nb-sb-* 基线（此处），皮肤包 CSS 同选择器品牌化。
+ * （启动器形态下工具条退场由 ChatPanel 模板 v-if 承担——CSS display:none
+ * 会被 scoped display:flex 同特异性后加载压回，见 2026-09-26 实录。） */
+html[data-skin="bot"] .nb-sb {
+  padding: 12px 10px;
+  gap: 4px;
+  overflow: hidden;
+}
+html[data-skin="bot"] .nb-sb-newtask {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  height: 36px;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent);
+  color: var(--bg-primary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+html[data-skin="bot"] .nb-sb-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+html[data-skin="bot"] .nb-sb-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 28px;
+  padding: 0 8px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+}
+html[data-skin="bot"] .nb-sb-item:hover {
+  background: var(--bg-secondary);
+  color: var(--text);
+}
+html[data-skin="bot"] .nb-sb-item--active {
+  background: var(--bg-secondary);
+  color: var(--text);
+  font-weight: 500;
+}
+html[data-skin="bot"] .nb-sb-more-wrap {
+  position: relative;
+}
+html[data-skin="bot"] .nb-sb-flyout {
+  position: absolute;
+  left: 0;
+  top: 32px;
+  z-index: calc(var(--z-sidebar, 100) + 20);
+  min-width: 140px;
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid var(--border-light);
+  background: var(--bg-primary);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+}
+html[data-skin="bot"] .nb-sb-flyout-item {
+  display: block;
+  width: 100%;
+  padding: 0 10px;
+  height: 28px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+html[data-skin="bot"] .nb-sb-flyout-item:hover {
+  background: var(--bg-secondary);
+  color: var(--text);
+}
+html[data-skin="bot"] .nb-sb-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  margin-top: 8px;
+}
+html[data-skin="bot"] .nb-sb-group {
+  margin-bottom: 4px;
+}
+html[data-skin="bot"] .nb-sb-section {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+  padding: 0 4px;
+  color: var(--text-tertiary, var(--text-secondary));
+  font-size: 12px;
+  user-select: none;
+}
+html[data-skin="bot"] .nb-sb-section--space {
+  margin-top: 16px;
+}
+html[data-skin="bot"] .nb-sb-caret {
+  display: inline-flex;
+  color: var(--text-tertiary, var(--text-secondary));
+}
+html[data-skin="bot"] .nb-sb-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 8px 0 22px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+html[data-skin="bot"] .nb-sb-row:hover {
+  background: var(--bg-secondary);
+  color: var(--text);
+}
+html[data-skin="bot"] .nb-sb-row--active {
+  background: var(--bg-secondary);
+  color: var(--text);
+}
+html[data-skin="bot"] .nb-sb-row-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+}
+html[data-skin="bot"] .nb-sb-row-time {
+  flex-shrink: 0;
+  font-size: 11px;
+  color: var(--text-tertiary, var(--text-secondary));
+}
+html[data-skin="bot"] .nb-sb-row-del {
+  display: none;
+  flex-shrink: 0;
+  color: var(--text-tertiary, var(--text-secondary));
+  cursor: pointer;
+}
+html[data-skin="bot"] .nb-sb-row:hover .nb-sb-row-del {
+  display: inline-flex;
+}
+html[data-skin="bot"] .nb-sb-row-del:hover {
+  color: var(--error, #e5484d);
+}
+html[data-skin="bot"] .nb-sb-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+html[data-skin="bot"] .nb-sb-empty {
+  padding: 8px;
+  color: var(--text-tertiary, var(--text-secondary));
+  font-size: 12px;
+}
+html[data-skin="bot"] .nb-sb-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 4px 2px;
+  border-top: 1px solid var(--border-light);
+}
+html[data-skin="bot"] .nb-sb-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+html[data-skin="bot"] .nb-sb-user {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+html[data-skin="bot"] .nb-sb-user-name {
+  font-size: 12px;
+  color: var(--text);
+}
+html[data-skin="bot"] .nb-sb-user-sub {
+  font-size: 11px;
+  color: var(--text-tertiary, var(--text-secondary));
+}
+html[data-skin="bot"] .nb-sb-gear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+html[data-skin="bot"] .nb-sb-gear:hover {
+  background: var(--bg-secondary);
+  color: var(--text);
+}
+
+/* ---- 官方扩展：E-Stop 行（footer 上方；engaged 红、busy 半透明禁点）---- */
+html[data-skin="bot"] .nb-sb-estop-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 4px 2px;
+}
+html[data-skin="bot"] .nb-sb-estop {
+  flex: 1;
+  height: 28px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  transition: border-color var(--duration-fast, 0.15s) var(--ease-out, ease),
+    color var(--duration-fast, 0.15s) var(--ease-out, ease),
+    background var(--duration-fast, 0.15s) var(--ease-out, ease);
+}
+html[data-skin="bot"] .nb-sb-estop:hover {
+  border-color: var(--error, #e5484d);
+  color: var(--error, #e5484d);
+}
+html[data-skin="bot"] .nb-sb-estop.engaged {
+  border-color: var(--error, #e5484d);
+  background: var(--error, #e5484d);
+  color: #fff;
+  font-weight: 600;
+}
+html[data-skin="bot"] .nb-sb-estop[disabled] {
+  opacity: 0.55;
+  cursor: wait;
+}
+html[data-skin="bot"] .nb-sb-fa {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 4px;
+  border: 1px solid var(--warning, #f5a623);
+  color: var(--warning, #f5a623);
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* ---- 官方扩展：签名徽标（data-sig 四态着色；文案/悬停说明走投影）---- */
+html[data-skin="bot"] .nb-sb-sig {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+  color: var(--text-tertiary, var(--text-secondary));
+}
+html[data-skin="bot"] .nb-sb-sig[data-sig="verified"] {
+  color: var(--success, #46a758);
+}
+html[data-skin="bot"] .nb-sb-sig[data-sig="invalid"] {
+  color: var(--error, #e5484d);
+}
+html[data-skin="bot"] .nb-sb-sig[data-sig="unverified"] {
+  color: var(--warning, #f5a623);
+}
+
+/* ===== v3 chat 槽基线（消息流 + 输入区；第三方包同前缀覆盖）===== */
+html[data-skin="bot"] .nb-chat {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+}
+html[data-skin="bot"] .nb-chat-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px clamp(12px, 4vw, 32px) 8px;
+}
+html[data-skin="bot"] .nb-chat-empty {
+  margin: auto;
+  color: var(--text-tertiary, var(--text-secondary));
+  font-size: 13px;
+}
+html[data-skin="bot"] .nb-chat-row {
+  display: flex;
+}
+html[data-skin="bot"] .nb-chat-row--user {
+  justify-content: flex-end;
+}
+html[data-skin="bot"] .nb-chat-bubble {
+  max-width: min(78%, 832px);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light, var(--border));
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-size: var(--text-sm, 13px);
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+html[data-skin="bot"] .nb-chat-row--user .nb-chat-bubble {
+  background: var(--accent);
+  border-color: transparent;
+  color: #fff;
+}
+html[data-skin="bot"] .nb-chat-row--error .nb-chat-bubble {
+  border-color: var(--error, #e5484d);
+}
+html[data-skin="bot"] .nb-chat-md :first-child { margin-top: 0; }
+html[data-skin="bot"] .nb-chat-md :last-child { margin-bottom: 0; }
+html[data-skin="bot"] .nb-chat-md pre {
+  overflow-x: auto;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light, var(--border));
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+}
+html[data-skin="bot"] .nb-chat-md code {
+  font-family: var(--font-mono, ui-monospace, Consolas, monospace);
+}
+html[data-skin="bot"] .nb-chat-meta {
+  font-size: 11px;
+  color: var(--text-tertiary, var(--text-secondary));
+  margin-bottom: 4px;
+}
+html[data-skin="bot"] .nb-chat-composer {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 10px clamp(12px, 4vw, 32px) 14px;
+}
+html[data-skin="bot"] .nb-chat-input {
+  flex: 1;
+  resize: none;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 9px 12px;
+  font-size: var(--text-sm, 13px);
+  color: var(--text);
+  font-family: inherit;
+  line-height: 1.5;
+}
+html[data-skin="bot"] .nb-chat-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+html[data-skin="bot"] .nb-chat-send,
+html[data-skin="bot"] .nb-chat-stop {
+  border: none;
+  border-radius: 10px;
+  padding: 9px 16px;
+  font-size: var(--text-sm, 13px);
+  cursor: pointer;
+  background: var(--accent);
+  color: #fff;
+}
+html[data-skin="bot"] .nb-chat-send[disabled] {
+  opacity: 0.5;
+  cursor: default;
+}
+html[data-skin="bot"] .nb-chat-stop {
+  background: var(--error, #e5484d);
+}
+html[data-skin="bot"] .nb-chat-home {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}

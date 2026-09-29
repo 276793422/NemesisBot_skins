@@ -1022,6 +1022,18 @@ html[data-skin="openlikebuddy"] .modal-overlay {
 }
 
 /* ============================================================
+ * §8b 窄窗带（769-1024）— 宿主把 .sidebar 压成 56px 图标栏并隐藏
+ * .nav-label；结构侧栏复用 .sidebar 定位壳但不复用这些文字类，文字/图标
+ * 挤成一列竖排（2026-09-29 用户实录）。会话侧栏在 56px 下不可用，钉回
+ * 全宽；≤768 交还宿主抽屉规则（抽屉自身恢复 --sidebar-width，不冲突）。
+ * ============================================================ */
+@media (min-width: 769px) and (max-width: 1024px) {
+  html[data-skin="openlikebuddy"] .sidebar.nb-sb {
+    width: var(--sidebar-width);
+  }
+}
+
+/* ============================================================
  * §9 折叠侧栏微调 — 56px 折叠态下 28px 行保持居中可用
  * ============================================================ */
 html[data-skin="openlikebuddy"] .sidebar.collapsed .nav-item {

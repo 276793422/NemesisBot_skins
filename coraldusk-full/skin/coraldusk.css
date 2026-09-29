@@ -1,0 +1,194 @@
+/* CoralDusk — 暖珊瑚观感皮肤（源自 new_ui 设计语言）。
+ *
+ * 三段式（与 openlikebuddy 同构）：
+ *   §1 token 层——html[data-skin="coraldusk"] 暖深空灰蓝暗基座
+ *      + [data-theme="light"] 暖白亮变体；
+ *   §2 alias 收编——组件生态裸 var() 槽（--danger/--primary/--bg-* 族）；
+ *   §3 点覆盖——.btn/.card hover 上浮（宿主基线是平的）+ 主按钮珊瑚光晕
+ *      + 侧栏 logo 渐变字 + 滚动条可见度。
+ *
+ * 明暗切换 = 宿主 useTheme 在 <html> 翻 data-theme 属性，本文件两级选择器
+ * 天然跟随；换肤 = /skins/active.css 整文件热替换，免刷新。
+ * 零外链（无 url()），零字体度量改动（沿用宿主 Inter/Geist Mono 与字号）。
+ */
+
+/* ===== §1 token 层（暗基座） ===== */
+html[data-skin="coraldusk"] {
+  /* 品牌——暖珊瑚 */
+  --accent: #E8705A;
+  --accent-hover: #F08A78;
+  --accent-muted: rgba(232, 112, 90, 0.12);
+
+  /* 主按钮契约槽（宿主 .btn-primary 消费） */
+  --btn-primary-bg: var(--accent);
+  --btn-primary-hover: var(--accent-hover);
+  --btn-primary-fg: #FFFFFF;
+
+  /* 背景——暖深空灰蓝（替代纯黑） */
+  --bg: #1A1D23;
+  --bg-primary: #1E222A;
+  --bg-secondary: #252A33;
+  --surface: #2D333D;
+  --surface-hover: #363D48;
+  --surface-active: #404852;
+
+  /* 边框——更透明的柔和白 */
+  --border: rgba(255, 255, 255, 0.08);
+  --border-light: rgba(255, 255, 255, 0.05);
+
+  /* 文本——暖白（不那么刺眼） */
+  --text: #F0EBE5;
+  --text-secondary: #B8B2AA;
+  --text-muted: #7A756F;
+  --text-inverse: #1A1D23;
+
+  /* 状态——柔和 pastel */
+  --success: #6DD89C;
+  --success-bg: rgba(109, 216, 156, 0.1);
+  --error: #E87A7A;
+  --error-bg: rgba(232, 122, 122, 0.1);
+  --warning: #E8C87A;
+  --warning-bg: rgba(232, 200, 122, 0.1);
+  --info: #7AA8E8;
+  --info-bg: rgba(122, 168, 232, 0.1);
+
+  /* 圆角——更圆更友好 */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+
+  /* 阴影——分层、柔和、有空气感 */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 1px rgba(0, 0, 0, 0.1);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25), 0 0 1px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3), 0 0 2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 4px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.4), 0 0 8px rgba(0, 0, 0, 0.1);
+
+  /* 动效——更有机 */
+  --duration-fast: 200ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+
+  /* 侧栏——略宽，触摸目标更舒服 */
+  --sidebar-width: 260px;
+  --sidebar-collapsed-width: 64px;
+
+  /* ===== §2 alias 收编（组件生态裸槽位） ===== */
+  --danger: var(--error);
+  --danger-bg: var(--error-bg);
+  --primary: var(--accent);
+  --color-success: var(--success);
+  --error-color: var(--error);
+  --text-primary: var(--text);
+  --border-color: var(--border);
+  --bg-tertiary: var(--bg-secondary);
+  --bg-surface: var(--surface);
+  --bg-panel: var(--surface);
+  --bg-input: rgba(255, 255, 255, 0.06);
+  --bg-elev: rgba(255, 255, 255, 0.06);
+  --bg-hover: rgba(255, 255, 255, 0.08);
+  --bg-inset: rgba(255, 255, 255, 0.08);
+  --bg-warning: var(--warning-bg);
+}
+
+/* ===== §1b token 层（暖白亮变体） ===== */
+html[data-skin="coraldusk"][data-theme="light"] {
+  --bg: #F7F5F2;
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F0EDE8;
+  --surface: #FFFFFF;
+  --surface-hover: #F5F3F0;
+  --surface-active: #EBE8E3;
+
+  --border: rgba(0, 0, 0, 0.06);
+  --border-light: rgba(0, 0, 0, 0.04);
+
+  --text: #1E1B18;
+  --text-secondary: #5A5550;
+  --text-muted: #9A948E;
+  --text-inverse: #FFFFFF;
+
+  --accent-muted: rgba(232, 112, 90, 0.08);
+
+  --success-bg: rgba(109, 216, 156, 0.12);
+  --error-bg: rgba(232, 122, 122, 0.08);
+  --warning-bg: rgba(232, 200, 122, 0.12);
+  --info-bg: rgba(122, 168, 232, 0.08);
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04), 0 0 1px rgba(0, 0, 0, 0.02);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06), 0 0 1px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08), 0 0 2px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.1), 0 0 4px rgba(0, 0, 0, 0.02);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.12), 0 0 8px rgba(0, 0, 0, 0.02);
+
+  --bg-input: rgba(0, 0, 0, 0.04);
+  --bg-elev: rgba(0, 0, 0, 0.04);
+  --bg-hover: rgba(0, 0, 0, 0.05);
+  --bg-inset: rgba(0, 0, 0, 0.06);
+}
+
+/* ===== §3 点覆盖（宿主 hover 基线是平的——new_ui 的上浮感在此交付） ===== */
+
+/* 按钮：hover 上浮 1px + 落影；active 回位。transform 走 spring 缓动。 */
+html[data-skin="coraldusk"] .btn {
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-spring),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+html[data-skin="coraldusk"] .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+html[data-skin="coraldusk"] .btn:active {
+  transform: translateY(0);
+}
+
+/* 主按钮：珊瑚光晕（new_ui 招牌效果）。 */
+html[data-skin="coraldusk"] .btn-primary:hover {
+  box-shadow: 0 4px 12px rgba(232, 112, 90, 0.25);
+}
+
+/* 卡片：hover 浮起 2px + 中档落影。 */
+html[data-skin="coraldusk"] .card {
+  box-shadow: var(--shadow-xs);
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-spring);
+}
+html[data-skin="coraldusk"] .card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* 侧栏 logo 渐变字（珊瑚 → 暖橙，new_ui 招牌）。 */
+html[data-skin="coraldusk"] .sidebar-logo h1 {
+  background: linear-gradient(135deg, var(--accent) 0%, #F0A080 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 滚动条：边框色改成透明度白后默认 thumb 会淡到不可见，按明暗各给一档。 */
+html[data-skin="coraldusk"] ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.14);
+}
+html[data-skin="coraldusk"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.24);
+}
+html[data-skin="coraldusk"] * {
+  scrollbar-color: rgba(255, 255, 255, 0.14) transparent;
+}
+html[data-skin="coraldusk"][data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.14);
+}
+html[data-skin="coraldusk"][data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.24);
+}
+html[data-skin="coraldusk"][data-theme="light"] * {
+  scrollbar-color: rgba(0, 0, 0, 0.14) transparent;
+}

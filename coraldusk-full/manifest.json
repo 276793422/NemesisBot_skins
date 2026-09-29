@@ -1,0 +1,27 @@
+{
+  "format": "nbskin",
+  "format_version": 1,
+  "id": "coraldusk-full",
+  "name": "CoralDusk Full",
+  "brand": "CoralDusk",
+  "scenes": [
+    "日常办公",
+    "代码开发",
+    "设计创意"
+  ],
+  "description": "CoralDusk 行为层脚本皮肤：new_ui 式合并导航（主页/能力/高级/设置/安全聚合分组，契约 navigate 跳转）+ 友好设置表单（按宿主 config.schema 渲染滑块/开关/下拉，写回走契约 API）+ 简洁/经典双壳切换（localStorage 持久化）。脚本失效或契约版本不符时自动降级为纯 CSS 观感（html[data-nb-skin-state] 如实标注原因）。观感基线 = CoralDusk 暖珊瑚 + 暖深空灰蓝，与 coraldusk 纯 CSS 包同源。",
+  "version": "1.0.0",
+  "type": "theme",
+  "entry": "skin/coraldusk.css",
+  "script": "skin/main.js",
+  "variants": [
+    "light",
+    "dark"
+  ],
+  "compat": {
+    "dashboard": ">=0.1",
+    "nemesisskin": "1"
+  },
+  "author": "NemesisBot",
+  "license": "MIT"
+}

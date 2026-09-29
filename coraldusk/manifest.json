@@ -1,0 +1,25 @@
+{
+  "format": "nbskin",
+  "format_version": 1,
+  "id": "coraldusk",
+  "name": "CoralDusk",
+  "brand": "CoralDusk",
+  "scenes": [
+    "日常办公",
+    "代码开发",
+    "设计创意"
+  ],
+  "description": "CoralDusk 暖珊瑚观感皮肤（源自 new_ui 设计语言）：品牌珊瑚 #E8705A + 暖深空灰蓝暗色基底 + 暖白亮色变体 + pastel 状态色；大圆角（8/12/16/20）+ 分层柔和阴影 + spring 弹性动效；按钮 hover 上浮、卡片 hover 浮起、主按钮珊瑚光晕、侧栏 logo 渐变字。纯 CSS 换色包，明暗双变体免刷新热切。",
+  "version": "1.0.0",
+  "type": "theme",
+  "entry": "skin/coraldusk.css",
+  "variants": [
+    "light",
+    "dark"
+  ],
+  "compat": {
+    "dashboard": ">=0.1"
+  },
+  "author": "NemesisBot",
+  "license": "MIT"
+}

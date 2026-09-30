@@ -136,7 +136,11 @@
       '.nbk-hint{color:var(--nb-text-dim,#7a756f);font-size:11.5px}',
       '.nbk-ok{color:#6dd89c}',
       '.nbk-err{color:#e87a7a}',
-      '@media (prefers-color-scheme:light), (min-width:0){html[data-skin="coraldusk-full"][data-theme="light"] .nbk-nav{background:#fff;border-color:rgba(0,0,0,.06)}}',
+      // 亮色主题（2026-09-30 本地体检补）：壳色板整套翻亮——在 html 作用域
+      // 重定义 --nb-* 消费变量，导航/表单/输入框全体跟随（变量单源，暗色
+      // fallback 值零改动）。旧规则只点补 .nbk-nav 背景不动文字色，亮色下
+      // 白底白字不可读（实测截图抓到）。
+      'html[data-skin="coraldusk-full"][data-theme="light"]{--nb-surface:#ffffff;--nb-bg:#f6f2ec;--nb-border:rgba(0,0,0,.1);--nb-text:#3a332c;--nb-text-dim:#8a8178;--nb-hover:rgba(0,0,0,.05)}',
       // 窄屏（≤768px）：224px 固定导航会吃掉大半视口且无横屏余量——让位
       // 归零、导航隐藏，右下角壳切换钮仍在（classic 壳回归原生移动端侧栏
       // + 汉堡菜单）。诚实边界：friendly 壳在窄屏本身不提供移动端导航。

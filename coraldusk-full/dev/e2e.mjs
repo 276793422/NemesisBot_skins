@@ -206,6 +206,22 @@ const browserBroken = await withChrome(async () => {
     await sleep(300)
     await tab.shot('s3-friendly-shell.png')
 
+    // ---- S3c 亮色主题（2026-09-30 本地体检回归锁）：html 作用域 --nb-*
+    //      重定义后导航白底 + 文字暗色可读（旧壳规则只翻背景，白底白字不可读）----
+    await tab.eval(`document.documentElement.setAttribute('data-theme','light')`)
+    await sleep(200)
+    const s3l = await tab.eval(`(() => {
+      const item = [...document.querySelectorAll('.nbk-nav-item')].find(e => !e.classList.contains('active'))
+      return {
+        navBg: getComputedStyle(document.querySelector('.nbk-nav')).backgroundColor,
+        itemColor: item ? getComputedStyle(item).color : '(none)',
+        mainLeft: document.querySelector('[data-nb-shell="main"]').getBoundingClientRect().left,
+      }
+    })()`)
+    record('S3 亮色：导航白底 + 文字暗色可读 + 几何不变', s3l.navBg === 'rgb(255, 255, 255)' && s3l.itemColor === 'rgb(58, 51, 44)' && s3l.mainLeft >= 223, JSON.stringify(s3l))
+    await tab.eval(`document.documentElement.setAttribute('data-theme','dark')`)
+    await sleep(200)
+
     // ---- S4 契约 navigate（点导航项跳路由；高亮等 renderNav 重绘完成） ----
     await tab.eval(`document.querySelector('[data-nbk-id="overview"]').click()`)
     await waitFor(tab, `document.querySelector('[data-nbk-id="overview"]')?.classList.contains('active')`, 'overview 跳转 + 高亮跟随')

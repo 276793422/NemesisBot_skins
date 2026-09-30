@@ -186,12 +186,43 @@ const browserBroken = await withChrome(async () => {
     record('S3 友好壳激活 + 原生侧栏隐藏', s3.shell === 'friendly' && s3.nativeHidden, `shell=${s3.shell} nativeHidden=${s3.nativeHidden}`)
     record('S3 合并分组（主页/能力/高级/设置/安全）', ['主页', '能力', '高级', '设置', '安全'].every(t => s3.titles.includes(t)), `titles=${JSON.stringify(s3.titles)}`)
     record('S3 导航项齐全', ['chat', 'overview', 'usage', 'logs', 'memory', 'skills', 'mcp', 'channels', 'workflows', 'cluster', 'forge', 'settings', 'security', 'scanner', 'sandbox'].every(id => s3.ids.includes(id)), `ids=${s3.ids.length}项`)
+    // 几何断言（2026-09-30 布局缺陷回归锁）：可见性断言抓不住「fixed 导航
+    // 压在主内容上」——主内容左缘必须让位到导航右缘之外（1px 容差取整）。
+    const s3g = await tab.eval(`(() => {
+      const nav = document.querySelector('.nbk-nav').getBoundingClientRect()
+      const main = document.querySelector('[data-nb-shell="main"]').getBoundingClientRect()
+      return { navRight: nav.right, mainLeft: main.left, ok: main.left >= nav.right - 1 }
+    })()`)
+    record('S3 几何：主内容让位到导航右侧（main.left ≥ nav.right）', s3g.ok, JSON.stringify(s3g))
+    // 窄屏媒体规则（2026-09-30 布局修复回归锁）：≤768px 导航隐藏 + 让位归零
+    await tab.send('Emulation.setDeviceMetricsOverride', { width: 375, height: 720, deviceScaleFactor: 2, mobile: true })
+    await sleep(400)
+    const s3m = await tab.eval(`(() => ({
+      nav: getComputedStyle(document.querySelector('.nbk-nav')).display,
+      mainLeft: document.querySelector('[data-nb-shell="main"]').getBoundingClientRect().left,
+    }))()`)
+    record('S3 窄屏：导航隐藏 + 内容全宽', s3m.nav === 'none' && s3m.mainLeft === 0, JSON.stringify(s3m))
+    await tab.send('Emulation.clearDeviceMetricsOverride')
+    await sleep(300)
     await tab.shot('s3-friendly-shell.png')
 
     // ---- S4 契约 navigate（点导航项跳路由；高亮等 renderNav 重绘完成） ----
     await tab.eval(`document.querySelector('[data-nbk-id="overview"]').click()`)
     await waitFor(tab, `document.querySelector('[data-nbk-id="overview"]')?.classList.contains('active')`, 'overview 跳转 + 高亮跟随')
     record('S4 navigate 跳转 + 高亮跟随', true)
+
+    // ---- S4b 聊天页壳切换钮避让输入区（2026-09-30 布局修复回归锁：
+    //      固定 chip 在聊天页会压住输入区右侧按钮，按路由标记抬升）----
+    await tab.eval(`document.querySelector('[data-nbk-id="chat"]').click()`)
+    await waitFor(tab, `document.querySelector('[data-nbk-id="chat"]')?.classList.contains('active')`, '回到聊天页')
+    const s4c = await tab.eval(`(() => {
+      const chip = document.querySelector('[data-nb-skin-shell-chip]').getBoundingClientRect()
+      const input = document.querySelector('.chat-input-area')
+      if (!input) return { ok: true, note: 'composer 不在场（跳过）' }
+      const inputTop = input.getBoundingClientRect().top
+      return { ok: chip.bottom <= inputTop + 1, chipBottom: chip.bottom, inputTop }
+    })()`)
+    record('S4 切换钮不压聊天输入区', s4c.ok, JSON.stringify(s4c))
 
     // ---- S5 友好设置表单（P3-b） ----
     await tab.eval(`document.querySelector('.nbk-nav-foot button').click()`)

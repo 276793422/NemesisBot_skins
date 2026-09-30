@@ -84,6 +84,12 @@
     var CSS = [
       'html[data-skin="coraldusk-full"][data-nb-shell="friendly"] [data-nb-shell="sidebar"]{display:none!important}',
       'html[data-skin="coraldusk-full"][data-nb-shell="friendly"] [data-nb-shell="mobile-overlay"]{display:none!important}',
+      // 布局缺陷修复（2026-09-30）：宿主 .app-layout 是 flex 行——隐藏原生
+      // 侧栏后 main-content 扩展全宽，而本导航 position:fixed 224px 会压在
+      // 每页内容上（E2E 旧截图 s3 即可见内容穿导航）。让位规则锚契约标记
+      // [data-nb-shell="main"]（contract.spec 守护），与隐藏规则同生共死：
+      // 脚本死/降级/classic 壳时选择器失效，让位随导航一起消失。
+      'html[data-skin="coraldusk-full"][data-nb-shell="friendly"] [data-nb-shell="main"]{margin-left:224px}',
       '.nbk-nav{position:fixed;top:0;left:0;bottom:0;width:224px;z-index:60;display:flex;flex-direction:column;',
       'background:var(--nb-surface,#252a33);border-right:1px solid var(--nb-border,rgba(255,255,255,.08));',
       'padding:14px 10px calc(14px + 44px);overflow-y:auto;transition:transform .3s cubic-bezier(.16,1,.3,1)}',
@@ -101,6 +107,9 @@
       'background:var(--nb-accent,#e8705a);color:#fff;font-size:12.5px;box-shadow:0 6px 18px rgba(0,0,0,.25);',
       'transition:transform .2s cubic-bezier(.34,1.56,.64,1)}',
       '.nbk-chip:hover{transform:translateY(-2px)}',
+      // 聊天页右下角是输入区（工具行+输入行 ~140px），固定 chip 会压住输入
+      // 区右侧按钮（2026-09-30 实测截图）——按自家路由标记抬升避让。
+      'html[data-nbk-route="chat"] .nbk-chip{bottom:150px}',
       'html[data-nb-shell="classic"] .nbk-nav{display:none}',
       '.nbk-form-overlay{position:fixed;inset:0;z-index:80;background:rgba(10,12,16,.55);display:flex;align-items:center;justify-content:center}',
       '.nbk-form-panel{width:min(680px,92vw);max-height:82vh;display:flex;flex-direction:column;border-radius:16px;',
@@ -128,6 +137,13 @@
       '.nbk-ok{color:#6dd89c}',
       '.nbk-err{color:#e87a7a}',
       '@media (prefers-color-scheme:light), (min-width:0){html[data-skin="coraldusk-full"][data-theme="light"] .nbk-nav{background:#fff;border-color:rgba(0,0,0,.06)}}',
+      // 窄屏（≤768px）：224px 固定导航会吃掉大半视口且无横屏余量——让位
+      // 归零、导航隐藏，右下角壳切换钮仍在（classic 壳回归原生移动端侧栏
+      // + 汉堡菜单）。诚实边界：friendly 壳在窄屏本身不提供移动端导航。
+      // ⚠ 必须排在基础 .nbk-nav 规则之后——同特异性后者胜，放前面会被
+      // display:flex 覆盖（2026-09-30 实测踩过）。
+      '@media (max-width:768px){html[data-skin="coraldusk-full"][data-nb-shell="friendly"] [data-nb-shell="main"]{margin-left:0}',
+      '.nbk-nav{display:none}}',
     ].join('')
 
     // ---- DOM 装配（先脱管构建，最后统一上树——见文件尾启动段）----
@@ -154,6 +170,9 @@
     function renderNav() {
       nav.textContent = ''
       var current = currentRouteId()
+      // 自家路由标记（自家产物属性，非宿主 DOM 手术）：壳 CSS 按路由微调
+      //（聊天页壳切换钮抬升避让输入区）。
+      html.setAttribute('data-nbk-route', current)
       groupedNav().forEach(function (g) {
         if (g.title) {
           var t = document.createElement('div')
